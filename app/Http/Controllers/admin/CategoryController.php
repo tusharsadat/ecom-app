@@ -32,4 +32,27 @@ class CategoryController extends Controller
 
         return redirect()->route('allcategory')->with('message', 'Category added successfully');
     }
+
+    public function EditCategory($id)
+    {
+        $categoryinfo = Category::findOrFail($id);
+        return view('admin.editcategory', compact('categoryinfo'));
+    }
+
+    public function UpdateCategory(Request $request)
+    {
+        $category_id = $request->category_id;
+        //dd($request->all());
+
+        $request->validate([
+            'category_name' => 'required|unique:categories'
+        ]);
+
+        Category::findOrFail($category_id)->update([
+            'category_name' => $request->category_name,
+            'slug' => strtolower(str_replace(' ', '-', $request->category_name)),
+        ]);
+
+        return redirect()->route('allcategory')->with('message', 'Category update successfully');
+    }
 }
