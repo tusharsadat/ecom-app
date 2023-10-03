@@ -4,13 +4,15 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
 {
     public function index()
     {
-        return view('admin.allsubcategory');
+        $subcategories = Subcategory::latest()->get();
+        return view('admin.allsubcategory', compact('subcategories'));
     }
 
     public function AddSubCategory()
@@ -22,8 +24,21 @@ class SubCategoryController extends Controller
     public function StoreSubcategory(Request $request)
     {
         $request->validate([
-            'sub_category_name' => 'required|unique:subcategories',
-            'product_category' => 'required',
+            'subcategory_name' => 'required|unique:subcategories',
+            'category_id' => 'required',
         ]);
+
+        $category_id = $request->category_id;
+        $category_name = Category::where('id', $category_id)->value('category_name');
+
+        Subcategory::insert([
+            'subcategory_name' => $request->subcategory_name,
+            'slug' => strtolower(str_replace(' ', '-', $request->subcategory_name)),
+            'category_id' => $category_id,
+            'category_name' => $category_name,
+        ]);
+        Category::where('id', $category_id)->increment('subcategory_count', 1);
+
+        return redirect()->route('allsubcategory')->with('message', 'Sub category added successfully');
     }
 }

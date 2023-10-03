@@ -4,6 +4,17 @@
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms/</span> All Sub Category</h4>
         <div class="card">
             <h5 class="card-header">Available Sub Category info</h5>
+            @if (Session::get('message'))
+                <div class="alert alert-success">
+                    {{ Session::get('message') }}
+                </div>
+            @endif
+
+            @if (Session::get('fail'))
+                <div class="alert alert-danger">
+                    {{ Session::get('fail') }}
+                </div>
+            @endif
             <div class="table-responsive text-nowrap">
                 <table class="table">
                     <thead class="table-light">
@@ -16,16 +27,18 @@
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr>
-                            <td>1</td>
-                            <td>Fan</td>
-                            <td>Electronics</td>
-                            <td>111</td>
-                            <td>
-                                <a href="" class="btn btn-primary">Edit</a>
-                                <a href="" class="btn btn-warning">Delete</a>
-                            </td>
-                        </tr>
+                        @foreach ($subcategories as $subcategory)
+                            <tr>
+                                <td>{{ $subcategory->id }}</td>
+                                <td>{{ $subcategory->subcategory_name }}</td>
+                                <td>{{ $subcategory->category_name }}</td>
+                                <td>{{ $subcategory->product_count }}</td>
+                                <td>
+                                    <a href="" class="btn btn-primary">Edit</a>
+                                    <a href="" class="btn btn-warning">Delete</a>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

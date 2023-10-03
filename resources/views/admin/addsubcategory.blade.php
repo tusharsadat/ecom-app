@@ -9,23 +9,33 @@
                     <small class="text-muted float-end">Input Information</small>
                 </div>
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('storesubcategory') }}" method="POST">
+                        @csrf
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Sub Category Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="sub_category_name" name="sub_category_name"
+                                <input type="text" class="form-control" id="subcategory_name" name="subcategory_name"
                                     placeholder="Enter Sub Category Name" />
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Select Category</label>
                             <div class="col-sm-10">
-                                <select class="form-select" id="product_category" name="product_category"
+                                <select class="form-select" id="category_id" name="category_id"
                                     aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    <option selected>Open this selected menu</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
