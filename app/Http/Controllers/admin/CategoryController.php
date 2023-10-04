@@ -55,4 +55,11 @@ class CategoryController extends Controller
 
         return redirect()->route('allcategory')->with('message', 'Category update successfully');
     }
+
+    public function DeleteCategory($id)
+    {
+        Category::findOrFail($id)->delete();
+
+        return redirect()->route('allcategory')->with('message', 'Category delete successfully');
+    }
 }
