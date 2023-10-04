@@ -41,4 +41,36 @@ class SubCategoryController extends Controller
 
         return redirect()->route('allsubcategory')->with('message', 'Sub category added successfully');
     }
+
+    public function EditSubCategory($id)
+    {
+        $subcat_info = Subcategory::findOrFail($id);
+
+        return view('admin.editsubcategory', compact('subcat_info'));
+    }
+
+    public function updatesubcategory(Request $request)
+    {
+        $subcategory_id = $request->subcategory_id;
+
+        $request->validate([
+            'subcategory_name' => 'required|unique:subcategories',
+        ]);
+
+        Subcategory::findOrFail($subcategory_id)->update([
+            'subcategory_name' => $request->subcategory_name,
+            'slug' => strtolower(str_replace(' ', '-', $request->subcategory_name)),
+        ]);
+
+        return redirect()->route('allsubcategory')->with('message', 'Sub category update successfully');
+    }
+
+    public function DeleteSubCategory($id)
+    {
+        $category_id = Subcategory::where('id', $id)->value('category_id');
+        Subcategory::findOrFail($id)->delete();
+        Category::where('id', $category_id)->decrement('subcategory_count', 1);
+
+        return redirect()->route('allsubcategory')->with('message', 'Sub category delete successfully');
+    }
 }
