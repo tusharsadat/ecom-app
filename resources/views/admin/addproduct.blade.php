@@ -9,7 +9,8 @@
                     <small class="text-muted float-end">Input Information</small>
                 </div>
                 <div class="card-body">
-                    <form action="" method="POST">
+                    <form action="{{ route('storeproduct') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Product Name</label>
                             <div class="col-sm-10">
@@ -34,8 +35,8 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Product Quantity</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="product_name" name="product_name"
-                                    placeholder="Enter Product Name" />
+                                <input type="text" class="form-control" id="product_count" name="product_count"
+                                    placeholder="Enter Product Quantity" />
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -48,22 +49,26 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Select Category</label>
                             <div class="col-sm-10">
-                                <select class="form-select" id="category" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select class="form-select" id="product_category_id" name="product_category_id"
+                                    aria-label="Default select example">
+                                    <option selected>Select product category</option>
+                                    @foreach ($category_info as $category)
+                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                    @endforeach
+
                                 </select>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Select Sub Category</label>
                             <div class="col-sm-10">
-                                <select class="form-select" id="category" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select class="form-select" id="category" name="product_subcategory_id"
+                                    aria-label="Default select example">
+                                    <option selected>Select product sub category</option>
+                                    @foreach ($subcategory_info as $subcategory)
+                                        <option value="{{ $subcategory->id }}">{{ $subcategory->subcategory_name }}</option>
+                                    @endforeach
+
                                 </select>
                             </div>
                         </div>
@@ -71,7 +76,7 @@
                             <label class="col-sm-2 col-form-label" for="formFile">Product Image</label>
                             <div class="col-sm-10">
 
-                                <input class="form-control" type="file" id="formFile" />
+                                <input class="form-control" type="file" id="product_img" name="product_img" />
                             </div>
                         </div>
                         <div class="row justify-content-end">
