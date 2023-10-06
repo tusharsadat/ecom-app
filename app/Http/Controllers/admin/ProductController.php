@@ -65,4 +65,53 @@ class ProductController extends Controller
 
         return redirect()->route('allproduct')->with('message', 'Product added successfully');
     }
+
+    public function EditProduct($id)
+    {
+        $product_info = Product::findOrFail($id);
+        return view('admin.editproduct', compact('product_info'));
+    }
+
+    public function UpdateProduct(Request $request)
+    {
+        $product_id = $request->id;
+
+        $request->validate([
+            'product_name' => 'required|unique:products',
+            'product_short_des' => 'required',
+            'product_long_des' => 'required',
+            'product_price' => 'required',
+            'product_img' => 'mimes:jpeg,jpg,png,gif|required|max:10000',
+            'product_count' => 'required',
+        ]);
+
+        $img = $request->product_img;
+        $img_name = hexdec(uniqid()) . '.' . $img->getClientOriginalExtension();
+        $request->product_img->move(public_path('upload'), $img_name);
+
+        Product::findOrFail($product_id)->update([
+            'product_name' => $request->product_name,
+            'product_short_des' => $request->product_short_des,
+            'product_long_des' => $request->product_long_des,
+            'product_price' => $request->product_price,
+            'product_img' => $img_name,
+            'product_count' => $request->product_count,
+            'slug' => strtolower(str_replace(' ', '-', $request->product_name)),
+        ]);
+
+        return redirect()->route('allproduct')->with('message', 'Product update successfully');
+    }
+
+    public function DeleteProduct($id)
+    {
+        $category_id = Product::where('id', $id)->value('product_category_id');
+        $subcategory_id = Product::where('id', $id)->value('product_subcategory_id');
+
+        Product::findOrFail($id)->delete();
+
+        Category::where('id', $category_id)->decrement('product_count', 1);
+        Subcategory::where('id', $subcategory_id)->decrement('product_count', 1);
+
+        return redirect()->route('allproduct')->with('message', 'Product delete successfully');
+    }
 }

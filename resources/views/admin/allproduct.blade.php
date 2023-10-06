@@ -23,7 +23,7 @@
                             <th>Product Name</th>
                             <th>Product Category</th>
                             <th>Product Price</th>
-                            <th>Product Quantity</th>
+                            <th>Product Image</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -34,10 +34,11 @@
                                 <td>{{ $product->product_name }}</td>
                                 <td>{{ $product->product_category_name }}</td>
                                 <td>{{ $product->product_price }}</td>
-                                <td>{{ $product->product_count }}</td>
+                                <td><img style="height: 100px" src="{{ asset('upload/' . $product->product_img) }}"
+                                        alt=""></td>
                                 <td>
-                                    <a href="" class="btn btn-primary">Edit</a>
-                                    <a href="" class="btn btn-warning">Delete</a>
+                                    <a href="{{ route('editproduct', $product->id) }}" class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('deleteproduct', $product->id) }}" class="btn btn-warning">Delete</a>
                                 </td>
                             </tr>
                         @endforeach
