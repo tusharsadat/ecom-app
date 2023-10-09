@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class HomeComtroller extends Controller
 {
     public function index()
     {
-        return view('client_template.home');
+        $product_info = Product::latest()->get();
+        return view('client_template.home', compact('product_info'));
     }
 }
