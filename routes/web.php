@@ -37,9 +37,21 @@ Route::controller(ClientController::class)->group(function () {
     Route::get('/customer-service', 'CustomerService')->name('customerservice');
 });
 
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::controller(ClientController::class)->group(function () {
+        Route::get('/add-to-cart', 'AddToCart')->name('addtocart');
+        Route::get('/checkout', 'CheckOutPage')->name('checkoutpage');
+        Route::get('/user-profile', 'UserProfile')->name('userprofile');
+        Route::get('/user-profile/pending-orders', 'PendingOrders')->name('pendingorders');
+        Route::get('/user-profile/history', 'History')->name('history');
+        Route::get('/todays-deal', 'TodaysDeal')->name('todaysdeal');
+        Route::get('/customer-service', 'CustomerService')->name('customerservice');
+    });
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified', 'role:admin'])->name('dashboard');
+})->middleware(['auth', 'verified', 'role:user'])->name('dashboard');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -47,7 +59,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:user'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/admin/dashboard', 'index')->name('admindashboard');
     });

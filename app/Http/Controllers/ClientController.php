@@ -18,7 +18,9 @@ class ClientController extends Controller
     public function SingleProduct($id)
     {
         $product_info = Product::findOrFail($id);
-        return view('client_template.singleproduct', compact('product_info'));
+        $subcategory_id = Product::where('id', $id)->value('product_subcategory_id');
+        $related_product = Product::where('product_subcategory_id', $subcategory_id)->latest()->get();
+        return view('client_template.singleproduct', compact('product_info', 'related_product'));
     }
 
     public function AddToCart()
@@ -34,6 +36,16 @@ class ClientController extends Controller
     public function UserProfile()
     {
         return view('client_template.userprofile');
+    }
+
+    public function PendingOrders()
+    {
+        return view('client_template.pending_orders');
+    }
+
+    public function History()
+    {
+        return view('client_template.history');
     }
 
     public function NewRelease()
