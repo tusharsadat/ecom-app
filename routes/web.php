@@ -40,6 +40,7 @@ Route::controller(ClientController::class)->group(function () {
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::controller(ClientController::class)->group(function () {
         Route::get('/add-to-cart', 'AddToCart')->name('addtocart');
+        Route::post('/product-to-cart/{id}', 'ProductToCart')->name('producttocart');
         Route::get('/checkout', 'CheckOutPage')->name('checkoutpage');
         Route::get('/user-profile', 'UserProfile')->name('userprofile');
         Route::get('/user-profile/pending-orders', 'PendingOrders')->name('pendingorders');
